@@ -30,6 +30,7 @@ def fun_dec(any_func):
 def get_cook():
     pass
   
+@fun_dec  
 def My_input():
   """Function input processing"""
   var_input = input (f"\n Добрый! Данное приложение по кулинарной книги.\n\
