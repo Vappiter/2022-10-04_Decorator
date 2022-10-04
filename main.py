@@ -1,14 +1,26 @@
 from functools import WRAPPER_ASSIGNMENTS
 from pprint import pprint
 import os
+import datetime
+
 
 cook_book = {}
 
 def fun_dec(any_func):
   
+  # file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
+  # os.chdir(file_path [0])
+ 
   def new_func(*args, **kwargs):
+    var_d_t = datetime.datetime.now()
+    var_d = var_d_t.strftime("%d-%m-%Y")
+    var_t = var_d_t.strftime("%I:%M:%S")
+    print (f'Дата вызова: {var_d}')
+    print (f'Время вызова: {var_t}')       
+    print (f'Имя функции: {any_func.__name__}')
+    print(f'Аргументы: args:{args}, kwars: {kwargs}')
     res = any_func(*args, **kwargs)
-    
+    print (f'Результат: {res}')
     return res
   
   return new_func
@@ -51,10 +63,11 @@ Q - выйти из приложения\
     
 def file_read():
   
-  ''' Read file cook book'''
+  #  Read file cook book 
   
   count_plus = 0 
-  os.chdir ("Z:\\2021-09-23_PYTHON\\Open_read_file")
+  file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
+  os.chdir(file_path [0])
   with open('recipes.txt', encoding='utf-8') as file_read:
       for work in file_read:
           name_cook = work.strip()
@@ -165,6 +178,7 @@ def counter_line_file(file):
   print(lines)
   return lines
 
+@fun_dec
 def solving_problem_three():
   dict_file = {}
   file_content = []
