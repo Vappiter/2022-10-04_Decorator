@@ -1,7 +1,7 @@
 from functools import WRAPPER_ASSIGNMENTS
 from pprint import pprint
 import os
-import datetime
+from datetime import datetime
 
 
 cook_book = {}
@@ -12,7 +12,7 @@ def fun_dec(any_func):
   # os.chdir(file_path [0])
  
   def new_func(*args, **kwargs):
-    var_d_t = datetime.datetime.now()
+    var_d_t = datetime.now()
     var_d = var_d_t.strftime("%d-%m-%Y")
     var_t = var_d_t.strftime("%I:%M:%S")
     print (f'Дата вызова: {var_d}')
