@@ -2,9 +2,13 @@ from functools import WRAPPER_ASSIGNMENTS
 from pprint import pprint
 import os
 from datetime import datetime
+import json
 
 
 cook_book = {}
+data_json = []
+# data_json_index = 0
+
 
 def fun_dec(any_func):
   
@@ -12,15 +16,28 @@ def fun_dec(any_func):
   # os.chdir(file_path [0])
  
   def new_func(*args, **kwargs):
+    
+    # global data_json_index
+    global data_json
+    
+    data = {}
     var_d_t = datetime.now()
-    var_d = var_d_t.strftime("%d-%m-%Y")
-    var_t = var_d_t.strftime("%I:%M:%S")
-    print (f'Дата вызова: {var_d}')
-    print (f'Время вызова: {var_t}')       
-    print (f'Имя функции: {any_func.__name__}')
-    print(f'Аргументы: args:{args}, kwars: {kwargs}')
+    data['Имя функции'] = any_func.__name__
+    data ['Дата вызова'] = var_d_t.strftime("%d-%m-%Y")
+    data['Время вызова'] = var_d_t.strftime("%I:%M:%S.%f")
+    data['Аргументы'] = {'args':args, 'kwars':kwargs}
+    # var_d = var_d_t.strftime("%d-%m-%Y")
+    # var_t = var_d_t.strftime("%I:%M:%S")
+    # print (f'Дата вызова: {var_d}')
+    # print (f'Время вызова: {var_t}')       
+    # print (f'Имя функции: {any_func.__name__}')
+    # print(f'Аргументы: args:{args}, kwars: {kwargs}')
     res = any_func(*args, **kwargs)
-    print (f'Результат: {res}')
+    # print (f'Результат: {res}')
+    data['Результат'] = res
+    data_json.append(data)
+    # data_json_index += 1
+    
     return res
   
   return new_func
@@ -58,17 +75,20 @@ Q - выйти из приложения\
   elif var_input == 'T': 
     solving_problem_three()
   elif var_input == 'Q':
+    with open("log_file.json", "a", encoding='utf-8') as write_file:
+       json.dump(data_json, write_file, ensure_ascii=False)
     exit()
   else:
     print ('\n Вы ввели не правильную команду!!! \n')  
     
+@fun_dec     
 def file_read():
   
   #  Read file cook book 
   
   count_plus = 0 
-  file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
-  os.chdir(file_path [0])
+  # file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
+  # os.chdir(file_path [0])
   with open('recipes.txt', encoding='utf-8') as file_read:
       for work in file_read:
           name_cook = work.strip()
@@ -88,7 +108,8 @@ def file_read():
                 cook_book[name_cook] = temp_data
               file_read.readline()  
   print (f'\n Из файла перенесено в книгу {count_plus} рец.\n')    
-  
+
+@fun_dec   
 def add_cook():
   
   # Add cook in RAM and file
@@ -106,8 +127,8 @@ def add_cook():
   var_add_file = input ('\n Добавить рецепт в файл (Y/N)')    
   var_add_file =  var_add_file.upper()
   if var_add_file == 'Y':
-    file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
-    os.chdir(file_path [0])  
+    # file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
+    # os.chdir(file_path [0])  
     with open('recipes.txt', 'a', encoding='utf-8') as file_wr:
         file_wr.write ('\n')
         file_wr.write(var_name_cook + '\n')
@@ -130,7 +151,8 @@ def del_cook():
 #         i1+=1          
 #       var_del_cook = input('Какой рецепт удаляем, введите его №:')
   pass 
-   
+
+@fun_dec    
 def input_dishes_person_or_list_cook(f_list = 0):
  
 #   Displays a list of recipes and launches function Сounts the number indgedients 
@@ -158,7 +180,8 @@ def input_dishes_person_or_list_cook(f_list = 0):
   get_shop_list_by_dishes (temp_cook,var_person_counter)
  else:
    return
-  
+ 
+@fun_dec   
 def get_shop_list_by_dishes(dishes, person_count):
   
   # Сounts the number indgedients 
@@ -171,7 +194,7 @@ def get_shop_list_by_dishes(dishes, person_count):
   pprint(temp_dishes)
   return temp_dishes
 
-
+@fun_dec 
 def counter_line_file(file):
   lines = 0
   with open(file, encoding='utf-8') as file_str:
@@ -183,8 +206,8 @@ def counter_line_file(file):
 def solving_problem_three():
   dict_file = {}
   file_content = []
-  file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
-  os.chdir(file_path [0])
+  # file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
+  # os.chdir(file_path [0])
   for var1 in range (1,4):
     name_file = str(var1) + '.txt'
     dict_file[name_file] = counter_line_file(name_file)
@@ -203,7 +226,9 @@ def solving_problem_three():
        file_wr.write(file_content[var1] + '\n')
   print (file_content)
 if __name__ == '__main__':
-    while My_input() != "Q":
-        My_input()
+   file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
+   os.chdir(file_path [0])
+   while My_input() != "Q":
+       My_input()
        
         
