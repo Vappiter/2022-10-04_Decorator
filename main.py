@@ -7,7 +7,7 @@ import json
 
 cook_book = {}
 data_json = []
-# data_json_index = 0
+
 
 
 def fun_dec(any_func):
@@ -17,8 +17,7 @@ def fun_dec(any_func):
  
   def new_func(*args, **kwargs):
     
-    # global data_json_index
-    global data_json
+    # global data_json
     
     data = {}
     var_d_t = datetime.now()
@@ -36,7 +35,7 @@ def fun_dec(any_func):
     # print (f'Результат: {res}')
     data['Результат'] = res
     data_json.append(data)
-    # data_json_index += 1
+    
     
     return res
   
@@ -77,6 +76,7 @@ Q - выйти из приложения\
   elif var_input == 'Q':
     with open("log_file.json", "a", encoding='utf-8') as write_file:
        json.dump(data_json, write_file, ensure_ascii=False)
+    print(data_json)
     exit()
   else:
     print ('\n Вы ввели не правильную команду!!! \n')  
