@@ -25,12 +25,6 @@ def fun_dec(any_func):
     data ['Дата вызова'] = var_d_t.strftime("%d-%m-%Y")
     data['Время вызова'] = var_d_t.strftime("%I:%M:%S.%f")
     data['Аргументы'] = {'args':args, 'kwars':kwargs}
-    # var_d = var_d_t.strftime("%d-%m-%Y")
-    # var_t = var_d_t.strftime("%I:%M:%S")
-    # print (f'Дата вызова: {var_d}')
-    # print (f'Время вызова: {var_t}')       
-    # print (f'Имя функции: {any_func.__name__}')
-    # print(f'Аргументы: args:{args}, kwars: {kwargs}')
     res = any_func(*args, **kwargs)
     # print (f'Результат: {res}')
     data['Результат'] = res
@@ -41,12 +35,36 @@ def fun_dec(any_func):
   
   return new_func
     
+def fun_dec_param(param):
   
-
+  def new_func_param (any_func):
+    
+    # file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
+    # os.chdir(file_path [0])
+ 
+    def new_func(*args, **kwargs):
+    
+      global data_json
+    
+      data = {}
+      var_d_t = datetime.now()
+      data['Имя функции'] = any_func.__name__
+      data ['Дата вызова'] = var_d_t.strftime("%d-%m-%Y")
+      data['Время вызова'] = var_d_t.strftime("%I:%M:%S.%f")
+      data['Аргументы'] = {'args':args, 'kwars':kwargs}
+      res = any_func(*args, **kwargs)
+      data['Результат'] = res
+      data_json.append(data)
+      with open(param, "a", encoding='utf-8') as write_file:
+       json.dump(data_json, write_file, ensure_ascii=False)
+      
+      return res
+    return new_func  
+  return new_func_param
 def get_cook():
     pass
   
-@fun_dec  
+@fun_dec_param (param = 'log_file_param.json')  
 def My_input():
   """Function input processing"""
   var_input = input (f"\n Добрый! Данное приложение по кулинарной книги.\n\
@@ -152,7 +170,7 @@ def del_cook():
 #       var_del_cook = input('Какой рецепт удаляем, введите его №:')
   pass 
 
-@fun_dec    
+@fun_dec_param (param = 'log_file_param.json')  
 def input_dishes_person_or_list_cook(f_list = 0):
  
 #   Displays a list of recipes and launches function Сounts the number indgedients 
