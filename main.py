@@ -39,13 +39,8 @@ def fun_dec_param(param):
   
   def new_func_param (any_func):
     
-    # file_path = (os.path.split(__file__)) # Считывает текущую директорию скрипта, тут же должны храниться файлы токенов
-    # os.chdir(file_path [0])
- 
     def new_func(*args, **kwargs):
-    
-      global data_json
-    
+             
       data = {}
       var_d_t = datetime.now()
       data['Имя функции'] = any_func.__name__
@@ -54,9 +49,8 @@ def fun_dec_param(param):
       data['Аргументы'] = {'args':args, 'kwars':kwargs}
       res = any_func(*args, **kwargs)
       data['Результат'] = res
-      data_json.append(data)
       with open(param, "a", encoding='utf-8') as write_file:
-       json.dump(data_json, write_file, ensure_ascii=False)
+       json.dump(data, write_file, ensure_ascii=False)
       
       return res
     return new_func  
@@ -94,7 +88,6 @@ Q - выйти из приложения\
   elif var_input == 'Q':
     with open("log_file.json", "a", encoding='utf-8') as write_file:
        json.dump(data_json, write_file, ensure_ascii=False)
-    print(data_json)
     exit()
   else:
     print ('\n Вы ввели не правильную команду!!! \n')  
